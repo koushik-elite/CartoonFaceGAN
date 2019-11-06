@@ -1,2 +1,2 @@
-# CartoonFaceGAN
-CartoonFaceGAN
+# Cartoon Face GAN
+
