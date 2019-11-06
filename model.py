@@ -1,4 +1,5 @@
 import torch.nn as nn
+import torch
 import torch.nn.functional as F
 import torchvision.transforms as transforms
 
@@ -19,15 +20,15 @@ def conv(index, in_channels, out_channels, kernel_size=4, stride=2, padding=1, b
                            kernel_size=kernel_size, stride=stride, 
                            padding=padding, bias=False)
     
-    layers.append("conv{}".format(index), conv_layer)
+    layers.append(conv_layer)
 
     if batch_norm:
-        layers.append("bn{}".format(index), nn.BatchNorm2d(out_channels))
+        layers.append(nn.BatchNorm2d(out_channels))
 
     if relu:
-        layers.add_module("relu{}".format(index), nn.ReLU(inplace=True))
+        layers.append(nn.ReLU(inplace=True))
     else:
-        layers.add_module("leaky_relu{}".format(index), nn.LeakyReLU(0.2, inplace=True))
+        layers.append(nn.LeakyReLU(0.2, inplace=True))
 
     return nn.Sequential(*layers)
 
@@ -38,8 +39,6 @@ def deconv(in_channels, out_channels, kernel_size, stride=2, padding=1, batch_no
     layers = []
     # append transpose conv layer
     layers.append(nn.ConvTranspose2d(in_channels, out_channels, kernel_size, stride, padding, bias=False))
-    # optional batch norm layer
-    layers.append(conv_layer)
 
     if batch_norm:
         layers.append(nn.BatchNorm2d(out_channels))
